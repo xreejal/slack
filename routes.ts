@@ -35,9 +35,14 @@ router.post(
 router.post("/github-webhook", async (req: Request, res: Response) => {
   try {
     console.log("Webhook received:", JSON.stringify(req.body, null, 2));
-    // Optionally validate event type/signature here
-    await handlePushEvent(req.body);
+    
+    // Respond immediately to avoid timeout
     res.status(200).send("Webhook received");
+    
+    // Process the webhook asynchronously
+    handlePushEvent(req.body).catch(error => {
+      console.error("Async webhook processing error:", error);
+    });
   } catch (error) {
     console.error("Webhook error:", error);
     res.status(500).send("Error processing webhook");
