@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const random_variable = "random_variable"; 
 
 export async function reviewCode(
   filePath: string,
