@@ -42,7 +42,6 @@ type PushPayload = {
 };
 
 export async function handlePushEvent(payload: PushPayload): Promise<void> {
-  // Validate payload structure
   if (!payload.repository || !payload.repository.name || !payload.repository.owner) {
     console.log("Invalid payload structure, skipping processing");
     return;
@@ -63,16 +62,23 @@ export async function handlePushEvent(payload: PushPayload): Promise<void> {
           content = Buffer.from(data.content, "base64").toString("utf-8");
         }
 
-        // Try to load rules from local file
         let rulesText = "";
         try {
           const fs = require('fs');
-          if (fs.existsSync('./rules.docx')) {
+          const path = require('path');
+          const rulesPath = path.join(process.cwd(), 'rules.docx');
+          console.log('Looking for rules file at:', rulesPath);
+          
+          if (fs.existsSync(rulesPath)) {
+            console.log('Rules file found, parsing...');
             const { parseDocx } = require('../utils/parseDocx');
-            rulesText = await parseDocx('./rules.docx');
+            rulesText = await parseDocx(rulesPath);
+            console.log('Rules loaded successfully, length:', rulesText.length);
+          } else {
+            console.log('Rules file not found at:', rulesPath);
           }
         } catch (error) {
-          console.log('No rules file found, using default review');
+          console.log('Error loading rules file:', error);
         }
         
         const review = await reviewCode(filePath, content, rulesText);
