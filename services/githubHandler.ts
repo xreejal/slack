@@ -1,4 +1,5 @@
 import { reviewCode } from "./ai";
+import { notifySlack } from "./slack";
 
 class SimpleGitHub {
   private token: string;
@@ -76,6 +77,17 @@ export async function handlePushEvent(payload: PushPayload): Promise<void> {
         
         const review = await reviewCode(filePath, content, rulesText);
         console.log(`Review for ${filePath}:\n${review}`);
+        
+        // Send review to Slack
+        if (review && review.trim()) {
+          const slackMessage = `🔍 *Code Review for ${filePath}*\n\n${review}`;
+          try {
+            await notifySlack(slackMessage);
+            console.log(`Review sent to Slack for ${filePath}`);
+          } catch (error) {
+            console.error(`Failed to send review to Slack for ${filePath}:`, error);
+          }
+        }
       } catch (error) {
         console.error(`Error processing ${filePath}:`, error);
       }

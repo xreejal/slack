@@ -31,15 +31,14 @@ router.post(
   }
 );
 
-// GitHub webhook endpoint (expects JSON payload from GitHub)
+
 router.post("/github-webhook", async (req: Request, res: Response) => {
   try {
     console.log("Webhook received:", JSON.stringify(req.body, null, 2));
     
-    // Respond immediately to avoid timeout
     res.status(200).send("Webhook received");
     
-    // Process the webhook asynchronously
+    
     handlePushEvent(req.body).catch(error => {
       console.error("Async webhook processing error:", error);
     });
@@ -49,7 +48,7 @@ router.post("/github-webhook", async (req: Request, res: Response) => {
   }
 });
 
-// Simple schema validation example
+
 router.post("/echo", (req: Request, res: Response) => {
   const schema = z.object({
     message: z.string().min(1, "Message is required"),
@@ -61,7 +60,7 @@ router.post("/echo", (req: Request, res: Response) => {
   res.json({ success: true, data: parsed.data });
 });
 
-// Minimal Slack notify test route
+
 router.post("/notify", async (req: Request, res: Response) => {
   const schema = z.object({ text: z.string().min(1), channel: z.string().optional() });
   const parsed = schema.safeParse(req.body);
