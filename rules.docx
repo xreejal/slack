@@ -1,0 +1,9 @@
+Coding Standards:
+- Use camelCase for variables
+- Use PascalCase for classes  
+- Add JSDoc comments for functions
+- Maximum line length: 80 characters
+- Use TypeScript strict mode
+- Always handle errors properly
+- Use meaningful variable names
+- Add comments for complex logic
