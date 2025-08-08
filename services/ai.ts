@@ -8,7 +8,7 @@ export async function reviewCode(
   rulesText?: string
 ): Promise<string> {
   const system =
-    "You are a precise code review assistant. Given code and human rules, produce concise issues and actionable fixes with short diffs.";
+    "You are a precise code review assistant. Given code and human rules, produce concise issues and actionable fixes with short diffs. Tell me some formatting Errors as well";
   const user = `Rules:\n${rulesText ?? "(none)"}\n\nFile: ${filePath}\n\nCode:\n${content}\n\nReturn:\n- Issues (bulleted)\n- Suggested patch (if clear)`;
 
   const resp = await openai.chat.completions.create({
