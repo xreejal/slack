@@ -2,7 +2,7 @@ import { WebClient } from "@slack/web-api";
 
 const slackToken = process.env.SLACK_BOT_TOKEN;
 const client = new WebClient(slackToken);
-const x = 0;
+
 export async function notifySlack(text: string, channel?: string) {
   const targetChannel = channel || process.env.SLACK_DEFAULT_CHANNEL;
   if (!slackToken) throw new Error("SLACK_BOT_TOKEN is not set");
